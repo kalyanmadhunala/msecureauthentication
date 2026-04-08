@@ -1,12 +1,14 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
-import transporter from "../config/nodemailer.js";
 import {
   verifyOTPTemplete,
   verifyResetOTPTemplete,
   welcomeEmailTemplete,
 } from "../utils/emailTempletes.js";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -40,17 +42,12 @@ export const register = async (req, res) => {
     });
 
     //Sending welcome email
-    const mailOptions = {
-      from: `"mSecure Auth" <${process.env.USER_EMAIL}>`,
+    await resend.emails.send({
+      from: 'mSecure Auth <onboarding@resend.dev>', // default works
       to: email,
       subject: "Welcome to mSecure Authenticator",
       html: welcomeEmailTemplete(name, email),
-    };
-
-    transporter
-      .sendMail(mailOptions)
-      .then(() => console.log("Email sent"))
-      .catch((err) => console.log("Email error:", err));
+    });
 
     return res.json({ success: true });
   } catch (error) {
@@ -130,15 +127,14 @@ export const sendVerifyOTP = async (req, res) => {
 
     await user.save();
 
-    //Sending verification email
-    const mailOptions = {
-      from: `"mSecure Auth" <${process.env.USER_EMAIL}>`,
-      to: user.email,
+    
+    //Sending welcome email
+    await resend.emails.send({
+      from: 'mSecure Auth <onboarding@resend.dev>', // default works
+      to: email,
       subject: "Email verification OTP",
       html: verifyOTPTemplete(user.name, otp),
-    };
-
-    await transporter.sendMail(mailOptions);
+    });
 
     return res.json({
       success: true,
@@ -215,14 +211,12 @@ export const sendResetOTP = async (req, res) => {
     await user.save();
 
     //Sending reset password verification email
-    const mailOptions = {
-      from: `"mSecure Auth" <${process.env.USER_EMAIL}>`,
-      to: user.email,
+    await resend.emails.send({
+      from: 'mSecure Auth <onboarding@resend.dev>', // default works
+      to: email,
       subject: "Password reset OTP",
       html: verifyResetOTPTemplete(user.name, resetotp),
-    };
-
-    await transporter.sendMail(mailOptions);
+    });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
