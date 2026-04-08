@@ -17,8 +17,8 @@ export const AppContextProvider = (props) => {
         try {
             const { data } = await axios.get(backendUrl + '/user/auth/isauth')
             if (data.success) {
+                await getUserData()
                 setIsLoggedin(true)
-                getUserData()
 
             }
         } catch (error) {

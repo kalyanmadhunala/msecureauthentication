@@ -38,9 +38,9 @@ const Login = () => {
           password,
         });
         if (data.success) {
+          await getUserData();
           setLoading(false);
           setIsLoggedin(true);
-          getUserData();
           navigate("/");
         } else {
           setLoading(false);
@@ -52,9 +52,9 @@ const Login = () => {
           password,
         });
         if (data.success) {
+          await getUserData();
           setLoading(false);
           setIsLoggedin(true);
-          getUserData();
           navigate("/");
         } else {
           setLoading(false);
