@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { AppContent } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
 
 const EmailVerify = () => {
 

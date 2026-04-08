@@ -4,7 +4,7 @@ import { AppContent } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-  const { userData, isLoggedin } = useContext(AppContent);
+  const { userData, isLoggedin, getUserData} = useContext(AppContent);
 
   const navigate = useNavigate();
   const fullText = `Hii ${userData !== "" ? userData.name : "There"}`;
@@ -12,6 +12,7 @@ const Header = () => {
   const [index, setIndex] = useState(0);
   const [showWave, setShowWave] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [showCheck, setShowCheck] = useState(false);
 
   // Typing effect
   useEffect(() => {
@@ -28,9 +29,14 @@ const Header = () => {
       // delay before showing rest of content
       setTimeout(() => {
         setShowContent(true);
+        setTimeout(() => {
+          setShowCheck(true);
+        }, 800);
       }, 400);
     }
   }, [index, fullText]);
+
+  
 
   return (
     <div className="flex flex-col items-center mt-20 px-4 text-center text-gray-800">
@@ -100,18 +106,20 @@ const Header = () => {
 
       {userData.isAccountVerified && (
         <p
-          className={`bg-green-600 text-green-50 rounded-full px-8 py-2.5 cursor-pointer transition-all duration-900 delay-600 ${
+          className={`flex gap-1 items-center justify-center bg-green-800 text-green-50 font-semibold text-sm rounded-full px-8 py-2.5 transition-all duration-900 delay-600 ${
             showContent
               ? "opacity-100 translate-y-0"
               : "opacity-0 translate-y-5"
           }`}
         >
           Account Verified{" "}
-          <img
-            src={assets.verified_check}
-            alt="verified_check"
-            className="w-6 aspect-square"
-          />
+          {showCheck && (
+            <img
+              src={assets.verified_check}
+              alt="verified_check"
+              className="w-6 aspect-square transition-all duration-500 opacity-100"
+            />
+          )}
         </p>
       )}
     </div>
