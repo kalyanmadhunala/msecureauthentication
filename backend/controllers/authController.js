@@ -2,7 +2,11 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
 import transporter from "../config/nodemailer.js";
-import { verifyOTPTemplete, verifyResetOTPTemplete, welcomeEmailTemplete } from "../utils/emailTempletes.js";
+import {
+  verifyOTPTemplete,
+  verifyResetOTPTemplete,
+  welcomeEmailTemplete,
+} from "../utils/emailTempletes.js";
 
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -43,7 +47,10 @@ export const register = async (req, res) => {
       html: welcomeEmailTemplete(name, email),
     };
 
-    await transporter.sendMail(mailOptions);
+    transporter
+      .sendMail(mailOptions)
+      .then(() => console.log("Email sent"))
+      .catch((err) => console.log("Email error:", err));
 
     return res.json({ success: true });
   } catch (error) {
@@ -128,7 +135,7 @@ export const sendVerifyOTP = async (req, res) => {
       from: `"mSecure Auth" <${process.env.USER_EMAIL}>`,
       to: user.email,
       subject: "Email verification OTP",
-      html: verifyOTPTemplete(user.name, otp)
+      html: verifyOTPTemplete(user.name, otp),
     };
 
     await transporter.sendMail(mailOptions);
@@ -228,19 +235,18 @@ export const sendResetOTP = async (req, res) => {
       maxAge: 10 * 60 * 1000,
     });
 
-       res.json({
+    res.json({
       success: true,
       msg: "Otp sent to your registered email successfully",
     });
-
   } catch (error) {
     return res.json({ success: false, msg: error.message });
   }
 };
 
 export const verifyResetOTP = async (req, res) => {
-  const userId = req.user.id
-  const {otp} = req.body;
+  const userId = req.user.id;
+  const { otp } = req.body;
 
   if (!otp || otp.length < 6) {
     return res.json({ success: false, msg: "Invalid OTP" });
@@ -275,8 +281,8 @@ export const verifyResetOTP = async (req, res) => {
 };
 
 export const resetPassword = async (req, res) => {
-  const userId = req.user.id
-  const {newpassword} = req.body
+  const userId = req.user.id;
+  const { newpassword } = req.body;
 
   if (!newpassword) {
     return res.json({ success: false, msg: "Missing details" });
@@ -293,20 +299,16 @@ export const resetPassword = async (req, res) => {
       return res.json({ success: false, msg: "User doesn't exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(newpassword, 10)
+    const hashedPassword = await bcrypt.hash(newpassword, 10);
 
-    user.password = hashedPassword
+    user.password = hashedPassword;
     await user.save();
 
-    return res.json({ success: true, msg: "Your password has been reset successfully" });
-
-
-
+    return res.json({
+      success: true,
+      msg: "Your password has been reset successfully",
+    });
   } catch (error) {
     return res.json({ success: false, msg: error.message });
   }
-  
-
-}
-
-
+};
