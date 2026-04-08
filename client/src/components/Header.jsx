@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Header = () => {
   const { userData, isLoggedin } = useContext(AppContent);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const fullText = `Hii ${userData !== "" ? userData.name : "There"}`;
   const [displayedText, setDisplayedText] = useState("");
   const [index, setIndex] = useState(0);
@@ -73,29 +73,47 @@ const Header = () => {
       </p>
 
       {/* Button */}
-      {!isLoggedin && (<button onClick={() => navigate('/login')}
-        className={`border border-gray-500 rounded-full px-8 py-2.5 cursor-pointer transition-all duration-900 delay-600 hover:bg-purple-300 ${
-          showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
-        }`}
-      >
-        Get Started
-      </button>)}
+      {!isLoggedin && (
+        <button
+          onClick={() => navigate("/login")}
+          className={`border border-gray-500 rounded-full px-8 py-2.5 cursor-pointer transition-all duration-900 delay-600 hover:bg-purple-300 ${
+            showContent
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-5"
+          }`}
+        >
+          Get Started
+        </button>
+      )}
 
-      {!userData.isAccountVerified && (<p
-        className={`border border-gray-500 rounded-full px-8 py-2.5 cursor-pointer transition-all duration-900 delay-600 hover:bg-purple-300 ${
-          showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
-        }`}
-      >
-        Verify your email in profile
-      </p>)}
+      {!userData.isAccountVerified && isLoggedin && (
+        <p
+          className={`border border-gray-500 rounded-full px-8 py-2.5 cursor-pointer transition-all duration-900 delay-600 hover:bg-purple-300 ${
+            showContent
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-5"
+          }`}
+        >
+          Verify your email in profile
+        </p>
+      )}
 
-      {userData.isAccountVerified && (<p
-        className={`bg-green-600 text-green-50 rounded-full px-8 py-2.5 cursor-pointer transition-all duration-900 delay-600 ${
-          showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
-        }`}
-      >
-        Account Verified <img src={assets.verified_check} alt="verified_check" className="w-6 aspect-square" />
-      </p>)}
+      {userData.isAccountVerified && (
+        <p
+          className={`bg-green-600 text-green-50 rounded-full px-8 py-2.5 cursor-pointer transition-all duration-900 delay-600 ${
+            showContent
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-5"
+          }`}
+        >
+          Account Verified{" "}
+          <img
+            src={assets.verified_check}
+            alt="verified_check"
+            className="w-6 aspect-square"
+          />
+        </p>
+      )}
     </div>
   );
 };
