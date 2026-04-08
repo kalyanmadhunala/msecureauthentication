@@ -30,6 +30,12 @@ connectDB();
 app.use("/user/auth", authRouter);
 app.use("/user", userRouter);
 
-app.get("/", (req, res) => res.send("API is working"));
+app.get("/", (req, res) => {
+  try {
+    res.json({ sucess: true, msg: "Server started" });
+  } catch (error) {
+    res.json({ sucess: false, msg: error.message });
+  }
+});
 
 app.listen(port, () => console.log(`Server started on port: ${port}`));
