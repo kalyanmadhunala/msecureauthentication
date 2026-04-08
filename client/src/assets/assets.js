@@ -4,6 +4,7 @@ import logo from './logo.svg'
 import mail_icon from './mail_icon.svg'
 import person_icon from './person_icon.svg'
 import hand_wave from './hand_wave.gif'
+import verified_check from './verified_check.gif'
 import header_img from './header_img.png'
 
 export const assets = {
@@ -13,5 +14,6 @@ export const assets = {
     mail_icon,
     person_icon,
     hand_wave,
-    header_img
+    header_img,
+    verified_check
 }
