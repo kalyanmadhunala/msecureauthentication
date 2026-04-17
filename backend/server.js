@@ -32,9 +32,9 @@ app.use("/user", userRouter);
 
 app.get("/", (req, res) => {
   try {
-    res.json({ sucess: true, msg: "Server started" });
+    res.json({ success: true, msg: "Server started" });
   } catch (error) {
-    res.json({ sucess: false, msg: error.message });
+    res.json({ success: false, msg: error.message });
   }
 });
 
